@@ -1,10 +1,19 @@
-//setting global constants
+//tshirt section constants
 const jobRoleField = document.getElementById('other-title');
 const jobRoles = document.getElementById('title');
 const tShirtSizes = document.getElementById('size');
 const tShirtThemes = document.getElementById('design');
 const tShirtColors = document.getElementById('color');
 const tShirtColorsLabel = document.querySelector("label[for='color']");
+let totalActivityCostLabel = document.createElement('h4');
+
+//activity section constants
+const activitiesList = document.querySelector('.activities');
+const activitiesListCheckboxes = document.querySelectorAll('.activities input');
+
+//payment section constants
+const bitcoinForm = document.getElementById('bitcoin');
+const paypalForm = document.getElementById('paypal');
 
 // found on stackoverflow, adjusted to use arrow function and replaced target id with 'name'.
 window.onload = () => {
@@ -15,6 +24,7 @@ window.onload = () => {
 
 //making Job Role input field hidden upon load
 jobRoleField.className = 'is-hidden';
+
 //Function created for if 'Other' is selected in the Job Role options, Job Role input field shows again
 function addOtherInputField() {
     jobRoles.addEventListener('change', (e) => {
@@ -78,5 +88,69 @@ addOtherInputField();
 Activity Section
 ****************
 */
+function updateTotalActivityCostLabel() {
+    totalActivityCostLabel.textContent = "Total Activity Cost: $" + totalActivityCost;
+}
+activitiesList.appendChild(totalActivityCostLabel);
 
+let totalActivityCost = 0;
+
+activitiesList.addEventListener('change', (e) => {
+    const clickedActivity = e.target;
+    const clickedActivityCost = clickedActivity.getAttribute('data-cost');
+
+    if (clickedActivity.checked) {
+        totalActivityCost += parseInt(clickedActivityCost);
+    } else {
+        totalActivityCost -= parseInt(clickedActivityCost);
+    }
+    updateTotalActivityCostLabel();
+    
+    const clickedDayAndTime = clickedActivity.getAttribute('data-day-and-time');
+
+    for (let i = 0; i < activitiesListCheckboxes.length; i++) {
+        const activitiesDayAndTimeIndex = activitiesListCheckboxes[i].getAttribute('data-day-and-time');
+            if (activitiesDayAndTimeIndex === clickedDayAndTime && clickedActivity !== activitiesListCheckboxes[i]) {
+                if (clickedActivity.checked) {
+                    activitiesListCheckboxes[i].disabled = true;
+                } else {
+                    activitiesListCheckboxes[i].disabled = false;
+                }
+            }
+    }
+});
+
+/*
+***************
+Payment Section
+***************
+*/
+const paymentSelector = document.querySelector('#payment');
+paymentSelector.options[0].hidden = true;
+bitcoinForm.hidden = true;
+paypalForm.hidden = true;
+
+paymentSelector.addEventListener('change', () => {
+    const paymentOption = document.getElementById('payment');
+    const paymentValue = paymentOption.value;
+    const creditCardForm = document.getElementById('credit-card');
+    const bitcoinForm = document.getElementById('bitcoin');
+    const paypalForm = document.getElementById('paypal');
+
+    if (paymentValue === "credit card") {
+        bitcoinForm.style.display = 'none';
+        paypalForm.style.display = 'none';
+        creditCardForm.style.display = 'block';
+
+    } else if (paymentValue === "paypal") {
+        bitcoinForm.style.display = 'none';
+        creditCardForm.style.display = 'none';
+        paypalForm.style.display = 'block';
+
+    } else if (paymentValue === "bitcoin") {
+        paypalForm.style.display = 'none';
+        creditCardForm.style.display = 'none';
+        bitcoinForm.style.display = 'block';                  
+    }
+});
 
