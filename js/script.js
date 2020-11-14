@@ -5,7 +5,7 @@ const tShirtSizes = document.getElementById('size');
 const tShirtThemes = document.getElementById('design');
 const tShirtColors = document.getElementById('color');
 const tShirtColorsLabel = document.querySelector("label[for='color']");
-let totalActivityCostLabel = document.createElement('h4');
+const totalActivityCostLabel = document.createElement('h4');
 
 //activity section constants
 const activitiesList = document.querySelector('.activities');
@@ -160,5 +160,5 @@ paymentSelector.addEventListener('change', () => {
     }
 });
 
-// functions
+// initialization functions
 addOtherInputField();
