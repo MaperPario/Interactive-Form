@@ -52,10 +52,12 @@ tShirtThemes.addEventListener('change', (e) => {
             lowestIndex = showMatchingColors('JS Puns shirt only');
             tShirtColors.options[lowestIndex].selected = true;
             break;
+
         case 'heart js':
             lowestIndex = showMatchingColors('JS shirt only');
             tShirtColors.options[lowestIndex].selected = true;
             break;
+
         default:
             console.log('Invalid Theme Selection');
             break;
@@ -64,24 +66,25 @@ tShirtThemes.addEventListener('change', (e) => {
 
 function showMatchingColors(themeIdentifier) {
     let lowestIndex = -1;
+
     for (let i = 0; i < tShirtColors.options.length; i++) {
         if (tShirtColors.options[i].textContent.indexOf(themeIdentifier) > -1) {
             showTShirtColor(i);
+
             if (lowestIndex === -1) {
                 lowestIndex = i;
             }
         }
     }
+
     return lowestIndex;
 }
 
 function showTShirtColor(number) {
-    const indexNumber = tShirtColors.options[number];
-    indexNumber.hidden = false;
+    tShirtColors.options[number].hidden = false;
 }
 
-// functions
-addOtherInputField();
+
 
 /*
 ****************
@@ -110,13 +113,13 @@ activitiesList.addEventListener('change', (e) => {
 
     for (let i = 0; i < activitiesListCheckboxes.length; i++) {
         const activitiesDayAndTimeIndex = activitiesListCheckboxes[i].getAttribute('data-day-and-time');
-            if (activitiesDayAndTimeIndex === clickedDayAndTime && clickedActivity !== activitiesListCheckboxes[i]) {
-                if (clickedActivity.checked) {
-                    activitiesListCheckboxes[i].disabled = true;
-                } else {
-                    activitiesListCheckboxes[i].disabled = false;
-                }
-            }
+        const isOverlappingActivityTime = activitiesDayAndTimeIndex === clickedDayAndTime;
+        const isClickedActivity = clickedActivity === activitiesListCheckboxes[i];
+        const isOverlappingActivity = isOverlappingActivityTime && !isClickedActivity;
+
+        if (isOverlappingActivity) {
+            activitiesListCheckboxes[i].disabled = clickedActivity.checked;
+        }
     }
 });
 
@@ -126,7 +129,12 @@ Payment Section
 ***************
 */
 const paymentSelector = document.querySelector('#payment');
-paymentSelector.options[0].hidden = true;
+const paymentSelectorPlaceholderIndex = 0;
+const paymentSelectorCreditCard = 1;
+
+paymentSelector.options[paymentSelectorPlaceholderIndex].hidden = true;
+paymentSelector.options[paymentSelectorCreditCard].selected = true;
+
 bitcoinForm.hidden = true;
 paypalForm.hidden = true;
 
@@ -141,12 +149,10 @@ paymentSelector.addEventListener('change', () => {
         bitcoinForm.style.display = 'none';
         paypalForm.style.display = 'none';
         creditCardForm.style.display = 'block';
-
     } else if (paymentValue === "paypal") {
         bitcoinForm.style.display = 'none';
         creditCardForm.style.display = 'none';
         paypalForm.style.display = 'block';
-
     } else if (paymentValue === "bitcoin") {
         paypalForm.style.display = 'none';
         creditCardForm.style.display = 'none';
@@ -154,3 +160,5 @@ paymentSelector.addEventListener('change', () => {
     }
 });
 
+// functions
+addOtherInputField();
