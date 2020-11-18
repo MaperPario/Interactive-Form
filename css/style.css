@@ -68,6 +68,10 @@ legend {
 	margin-bottom: 1.125em;
 }
 
+span.error {
+	color: red;
+}
+
 input[type="text"],
 input[type="email"],
 legend {

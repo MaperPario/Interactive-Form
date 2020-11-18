@@ -1,3 +1,5 @@
+const form = document.querySelector('form');
+
 //tshirt section constants
 const jobRoleField = document.getElementById('other-title');
 const jobRoles = document.getElementById('title');
@@ -7,13 +9,25 @@ const tShirtColors = document.getElementById('color');
 const tShirtColorsLabel = document.querySelector("label[for='color']");
 const totalActivityCostLabel = document.createElement('h4');
 
-//activity section constants
+//activity section constants (and lets)
 const activitiesList = document.querySelector('.activities');
+const firstActivity = activitiesList[0];
 const activitiesListCheckboxes = document.querySelectorAll('.activities input');
+let totalActivityCost = 0;
 
 //payment section constants
 const bitcoinForm = document.getElementById('bitcoin');
 const paypalForm = document.getElementById('paypal');
+const paymentSelector = document.querySelector('#payment');
+const paymentSelectorPlaceholderIndex = 0;
+const paymentSelectorCreditCard = 1;
+
+//form validation constants
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("mail");
+const creditCardNumberInput = document.getElementById("cc-num");
+const creditCardZipCodeInput = document.getElementById("zip");
+const creditCardCVVInput = document.getElementById("cvv");
 
 // found on stackoverflow, adjusted to use arrow function and replaced target id with 'name'.
 window.onload = () => {
@@ -84,19 +98,16 @@ function showTShirtColor(number) {
     tShirtColors.options[number].hidden = false;
 }
 
-
-
 /*
 ****************
 Activity Section
 ****************
 */
+
 function updateTotalActivityCostLabel() {
     totalActivityCostLabel.textContent = "Total Activity Cost: $" + totalActivityCost;
 }
 activitiesList.appendChild(totalActivityCostLabel);
-
-let totalActivityCost = 0;
 
 activitiesList.addEventListener('change', (e) => {
     const clickedActivity = e.target;
@@ -128,13 +139,9 @@ activitiesList.addEventListener('change', (e) => {
 Payment Section
 ***************
 */
-const paymentSelector = document.querySelector('#payment');
-const paymentSelectorPlaceholderIndex = 0;
-const paymentSelectorCreditCard = 1;
 
 paymentSelector.options[paymentSelectorPlaceholderIndex].hidden = true;
 paymentSelector.options[paymentSelectorCreditCard].selected = true;
-
 bitcoinForm.hidden = true;
 paypalForm.hidden = true;
 
@@ -159,6 +166,126 @@ paymentSelector.addEventListener('change', () => {
         bitcoinForm.style.display = 'block';                  
     }
 });
+
+/*
+***********************
+Form Validation Section
+***********************
+*/
+// master validation function
+function validateForm(e) {
+    let isInvalid = false;
+
+    if (!isValidName(nameInput.value)) {
+        isInvalid = true;
+        document.querySelector('#nameError').hidden = false;
+    }
+    
+    if (!validateEmail()) {
+        isInvalid = true;
+    }
+
+    if (!isCheckedActivity()) {
+        isInvalid = true;
+    }
+
+    if (paymentSelector[paymentSelectorCreditCard].selected) {
+        if (!isValidCreditCardNumber(creditCardNumberInput.value)) {
+            isInvalid = true;
+            document.querySelector('#cardNumberError').hidden = false;
+        }
+        if (!isValidZipCode(creditCardZipCodeInput.value)) {
+            isInvalid = true;
+            document.querySelector('#cardZipError').hidden = false;
+        }
+        if (!isValidCVV(creditCardCVVInput.value)) {
+            isInvalid = true;
+            document.querySelector('#cardCVVError').hidden = false;
+        }
+    }
+
+    if (isInvalid) {
+        e.preventDefault();
+    }
+}
+
+//validators
+function isValidName(name) {
+    return /^[a-zA-Z ]{2,30}$/.test(name);
+}
+
+function isValidEmail(email) {
+    return /^[^@]+@[^@.]+\.[a-z]+$/i.test(email);
+}
+
+function isCheckedActivity() {
+    for (let i = 0; i < activitiesListCheckboxes.length; i++) {
+        if (activitiesListCheckboxes[i].checked) {
+            document.getElementById('activitySpan').hidden = true;
+            return true;
+        }
+    }
+    document.getElementById('activitySpan').hidden = false;
+    return false;
+}
+
+
+function isValidCreditCardNumber(creditCardNum) {
+    return /^[0-9]{13,16}$/.test(creditCardNum);
+}
+
+function isValidZipCode(zipcode) {
+    return /^[0-9]{5}(?:-[0-9]{4})?$/.test(zipcode);
+}
+
+function isValidCVV(cvv) {
+    return /^[0-9]{3}$/.test(cvv);
+}
+
+function showOrHideTip (show, element) {
+    if (show) {
+        element.style.display = "inherit";
+    } else {
+        element.style.display = "none";
+    }
+}
+
+function createListener(validator) {
+    return e => {
+      const text = e.target.value;
+      const valid = validator(text);
+      const showTip = !valid;
+      const tooltip = e.target.previousElementSibling;
+      showOrHideTip(showTip, tooltip);
+    };
+  }
+
+function validateEmail() {
+    if (!emailInput.value) {
+        document.querySelector('#emailEmptyError').hidden = false;
+        document.querySelector('#emailError').hidden = true;
+
+        return false;
+    } 
+    const isValid = isValidEmail(emailInput.value);
+    document.querySelector('#emailEmptyError').hidden = true;
+    document.querySelector('#emailError').hidden = isValid;
+
+    return isValid;
+
+}
+
+nameInput.addEventListener("input", createListener(isValidName));
+emailInput.addEventListener("input", validateEmail);
+creditCardNumberInput.addEventListener("input", createListener(isValidCreditCardNumber));
+creditCardZipCodeInput.addEventListener("input", createListener(isValidZipCode));
+creditCardCVVInput.addEventListener("input", createListener(isValidCVV));
+
+for (let i = 0; i < activitiesListCheckboxes.length; i++) {
+    activitiesListCheckboxes[i].addEventListener('change', isCheckedActivity);
+}
+
+form.addEventListener('submit', validateForm);
 
 // initialization functions
 addOtherInputField();

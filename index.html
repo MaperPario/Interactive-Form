@@ -20,9 +20,13 @@
         <legend>Basic Info</legend>
         
         <label for="name">Name:</label>
+        <span class="error" id="nameError" hidden>Requires Minimum 2 Letters, Maximum 30.</span>
         <input type="text" id="name" name="user-name">
         
+        
         <label for="mail">Email:</label>
+        <span class="error" id="emailEmptyError" hidden>Email Address Required.</span>
+        <span class="error" id="emailError" hidden>Must be a valid email address.</span>
         <input type="email" id="mail" name="user-email">
         
         <label for="title">Job Role</label>
@@ -77,6 +81,7 @@
 
       <fieldset class="activities">
         <legend>Register for Activities</legend>
+        <span class="error" id="activitySpan" hidden>Please select one activity: </span>
           <label>
             <input type="checkbox" name="all" data-cost="200"> Main Conference — $200
           </label>
@@ -121,16 +126,19 @@
 
           <div class="col-6 col">
             <label for="cc-num">Card Number:</label>
+            <span class="error" id="cardNumberError" hidden>Requires Valid 13 to 16-Digit Card Number</span>
         	  <input id="cc-num" name="user-cc-num" type="text">
           </div>
 
           <div class="col-3 col">
             <label for="zip">Zip Code:</label>
+            <span class="error" id="cardZipError" hidden>Requires Valid 5-Digit Zip Code</span>
             <input id="zip" name="user-zip" type="text"> 
           </div>
 
           <div class="col-3 col">
             <label for="cvv">CVV:</label>
+            <span class="error" id="cardCVVError" hidden>Requires Valid 3-Digit CVV</span>
             <input id="cvv" name="user-cvv" type="text"> 
           </div>
 
