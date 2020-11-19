@@ -51,7 +51,7 @@ function addOtherInputField() {
 T-Shirt Section
 ***************
 */
-
+//listener that shows only specified colors when the corresponding theme is selected
 tShirtThemes.addEventListener('change', (e) => {
     tShirtColors.hidden = false;
     tShirtColorsLabel.textContent = 'Colors:';
@@ -78,6 +78,7 @@ tShirtThemes.addEventListener('change', (e) => {
     }
 });
 
+//created a function to be used in the above event listener
 function showMatchingColors(themeIdentifier) {
     let lowestIndex = -1;
 
@@ -94,6 +95,7 @@ function showMatchingColors(themeIdentifier) {
     return lowestIndex;
 }
 
+//function for showing appropiate tshirt color according to the option index
 function showTShirtColor(number) {
     tShirtColors.options[number].hidden = false;
 }
@@ -103,7 +105,7 @@ function showTShirtColor(number) {
 Activity Section
 ****************
 */
-
+// function created for updating the total cost of the selected activities
 function updateTotalActivityCostLabel() {
     totalActivityCostLabel.textContent = "Total Activity Cost: $" + totalActivityCost;
 }
@@ -140,11 +142,13 @@ Payment Section
 ***************
 */
 
+//initialization for the payment section
 paymentSelector.options[paymentSelectorPlaceholderIndex].hidden = true;
 paymentSelector.options[paymentSelectorCreditCard].selected = true;
 bitcoinForm.hidden = true;
 paypalForm.hidden = true;
 
+//listener that displays the specified form/information depending on the payment option that was selected
 paymentSelector.addEventListener('change', () => {
     const paymentOption = document.getElementById('payment');
     const paymentValue = paymentOption.value;
@@ -250,6 +254,7 @@ function showOrHideTip (show, element) {
     }
 }
 
+// factory function for showing error messages
 function createListener(validator) {
     return e => {
       const text = e.target.value;
@@ -260,6 +265,7 @@ function createListener(validator) {
     };
   }
 
+// function for multiple error messages to display for email field
 function validateEmail() {
     if (!emailInput.value) {
         document.querySelector('#emailEmptyError').hidden = false;
@@ -275,17 +281,18 @@ function validateEmail() {
 
 }
 
-nameInput.addEventListener("input", createListener(isValidName));
-emailInput.addEventListener("input", validateEmail);
-creditCardNumberInput.addEventListener("input", createListener(isValidCreditCardNumber));
-creditCardZipCodeInput.addEventListener("input", createListener(isValidZipCode));
-creditCardCVVInput.addEventListener("input", createListener(isValidCVV));
+//listeners for each input
+nameInput.addEventListener("input", createListener(isValidName)); //name listener
+emailInput.addEventListener("input", validateEmail); //email listener
+creditCardNumberInput.addEventListener("input", createListener(isValidCreditCardNumber)); //card number listener
+creditCardZipCodeInput.addEventListener("input", createListener(isValidZipCode)); //zipcode listener
+creditCardCVVInput.addEventListener("input", createListener(isValidCVV)); //cvv listener
 
 for (let i = 0; i < activitiesListCheckboxes.length; i++) {
-    activitiesListCheckboxes[i].addEventListener('change', isCheckedActivity);
+    activitiesListCheckboxes[i].addEventListener('change', isCheckedActivity); //activity checkbox listener
 }
 
-form.addEventListener('submit', validateForm);
+form.addEventListener('submit', validateForm); //form validation using master validation function
 
 // initialization functions
 addOtherInputField();
