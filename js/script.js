@@ -78,7 +78,7 @@ tShirtThemes.addEventListener('change', (e) => {
     }
 });
 
-//created a function to be used in the above event listener
+//function to be used in the above event listener for showing matching tshirt colors
 function showMatchingColors(themeIdentifier) {
     let lowestIndex = -1;
 
@@ -141,7 +141,6 @@ activitiesList.addEventListener('change', (e) => {
 Payment Section
 ***************
 */
-
 //initialization for the payment section
 paymentSelector.options[paymentSelectorPlaceholderIndex].hidden = true;
 paymentSelector.options[paymentSelectorCreditCard].selected = true;
@@ -232,7 +231,6 @@ function isCheckedActivity() {
     document.getElementById('activitySpan').hidden = false;
     return false;
 }
-
 
 function isValidCreditCardNumber(creditCardNum) {
     return /^[0-9]{13,16}$/.test(creditCardNum);
