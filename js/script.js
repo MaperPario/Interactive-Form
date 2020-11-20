@@ -218,7 +218,7 @@ function isValidName(name) {
 }
 
 function isValidEmail(email) {
-    return /^[^@]+@[^@.]+\.[a-z]+$/i.test(email);
+    return /^[^@]+@[^@.]+\.([a-z]{2,5})+$/i.test(email);
 }
 
 function isCheckedActivity() {
